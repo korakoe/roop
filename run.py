@@ -12,19 +12,18 @@ import torch
 from pathlib import Path
 import tkinter as tk
 from tkinter import filedialog
-from opennsfw2 import predict_video_frames, predict_image
 from tkinter.filedialog import asksaveasfilename
 import webbrowser
 import psutil
 import cv2
 import threading
 from PIL import Image, ImageTk
-import core.globals
-from core.swapper import process_video, process_img
-from core.utils import is_img, detect_fps, set_fps, create_video, add_audio, extract_frames, rreplace
-from core.analyser import get_face
+import roop.core.globals
+from roop.core.swapper import process_video_file, process_img_file
+from roop.core import is_img, detect_fps, set_fps, create_video, add_audio, extract_frames, rreplace
+from roop.core import get_face
 
-if 'ROCMExecutionProvider' in core.globals.providers:
+if 'ROCMExecutionProvider' in roop.core.globals.providers:
     del torch
 
 pool = None
@@ -71,7 +70,7 @@ def pre_check():
         quit('File "inswapper_128.onnx" does not exist!')
     if '--gpu' in sys.argv:
         NVIDIA_PROVIDERS = ['CUDAExecutionProvider', 'TensorrtExecutionProvider']
-        if len(list(set(core.globals.providers) - set(NVIDIA_PROVIDERS))) == 1:
+        if len(list(set(roop.core.globals.providers) - set(NVIDIA_PROVIDERS))) == 1:
             CUDA_VERSION = torch.version.cuda
             CUDNN_VERSION = torch.backends.cudnn.version()
             if not torch.cuda.is_available() or not CUDA_VERSION:
@@ -85,18 +84,18 @@ def pre_check():
             if CUDNN_VERSION > 8910:
                 quit(f"CUDNN version {CUDNN_VERSION} is not supported - please downgrade to 8.9.1")
     else:
-        core.globals.providers = ['CPUExecutionProvider']
+        roop.core.globals.providers = ['CPUExecutionProvider']
 
 
 def start_processing():
     if args['gpu']:
-        process_video(args['source_img'], args["frame_paths"])
+        process_video_file(args['source_img'], args["frame_paths"])
         return
     frame_paths = args["frame_paths"]
     n = len(frame_paths)//(args['cores_count'])
     processes = []
     for i in range(0, len(frame_paths), n):
-        p = pool.apply_async(process_video, args=(args['source_img'], frame_paths[i:i+n],))
+        p = pool.apply_async(process_video_file, args=(args['source_img'], frame_paths[i:i+n],))
         processes.append(p)
     for p in processes:
         p.get()
@@ -186,14 +185,9 @@ def start():
         print("\n[WARNING] No face detected in source image. Please try with another one.\n")
         return
     if is_img(target_path):
-        if predict_image(target_path) > 0.7:
-            quit()
-        process_img(args['source_img'], target_path, args['output_file'])
+        process_img_file(args['source_img'], target_path, args['output_file'])
         status("swap successful!")
         return
-    seconds, probabilities = predict_video_frames(video_path=args['target_path'], frame_interval=100)
-    if any(probability > 0.85 for probability in probabilities):
-        quit()
     video_name_full = target_path.split("/")[-1]
     video_name = os.path.splitext(video_name_full)[0]
     output_dir = os.path.dirname(target_path) + "/" + video_name

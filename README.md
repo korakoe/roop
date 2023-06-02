@@ -51,6 +51,23 @@ options:
 
 Looking for a CLI mode? Using the -f/--face argument will make the program in cli mode.
 
+**NEW!** - Pythonic API
+```
+pip install git+https://github.com/korakoe/roop.git
+```
+
+```python
+from roop.pipeline import RoopPipeline
+import cv2
+
+# this is a basic cv2 example, feel free to check out the other
+# other pipeline features, they're pretty easy to understand!
+
+pipe = RoopPipeline(model_path="Path to .onnx model")
+result = pipe.process_image(cv2.imread("source image"), cv2.imread("target image"))
+
+cv2.imshow("Roop", result)
+```
 ## Future plans
 - [ ] Improve the quality of faces in results
 - [ ] Replace a selective face throughout the video
