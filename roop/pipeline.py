@@ -1,12 +1,12 @@
 from core.swapper import get_face, process_img, process_img_file, process_video_file, get_face_swapper
 from core.analyser import get_face_analyser
-import core
+import core.globals as cGlobals
 import cv2
 from tqdm import tqdm
 from moviepy.editor import *
 import torch
 
-if 'ROCMExecutionProvider' in core.globals.providers:
+if 'ROCMExecutionProvider' in cGlobals.providers:
     del torch
 
 
