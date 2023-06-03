@@ -32,6 +32,7 @@ setup(
         "protobuf==4.23.2",
         "tqdm==4.65.0",
         "moviepy==1.0.3",
+        "codeformer-pip @ git+https://github.com/korakoe/codeformer-pip.git"
     ],
     classifiers=[
         "Development Status :: 4 - Beta",
