@@ -107,7 +107,7 @@ class RoopPipeline:
         """
         Processes a video file, and saves it if supplied an out_path
 
-        :param source_img: The image you want to deepfake with | cv2 image
+        :param source_img: The path to the image you want to deepfake with
         :param video_path: The path to the video you want to deepfake onto
         :param out_path: The output path of the video | No out path will only return the clip
         :param all_faces: Whether to deepfake all faces
