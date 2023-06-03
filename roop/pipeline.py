@@ -11,7 +11,7 @@ if 'ROCMExecutionProvider' in providers:
 
 
 class RoopPipeline:
-    def __init__(self, resolution=None, model_path=None):
+    def __init__(self, resolution=None, model_path=None, confidence=None):
         """
         The base RoopPipeline class
 
@@ -22,7 +22,7 @@ class RoopPipeline:
         self.model_path = model_path
 
         self.swapper = get_face_swapper(model_path)
-        self.analyser = get_face_analyser(resolution)
+        self.analyser = get_face_analyser(resolution, confidence)
         self.get_face = get_single_face
         self.get_all_faces = get_all_faces
 
