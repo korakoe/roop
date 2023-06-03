@@ -71,7 +71,7 @@ cv2.imshow("Roop", result)
 ## Future plans
 - [ ] Improve the quality of faces in results
 - [ ] Replace a selective face throughout the video
-- [ ] Support for replacing multiple faces
+- [X] Support for replacing multiple faces
 
 ## Credits
 - [ffmpeg](https://ffmpeg.org/): for making video related operations easy
