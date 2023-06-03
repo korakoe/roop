@@ -13,4 +13,5 @@ __all__ = [
     "rreplace",
     "get_single_face",
     "get_all_faces",
+    "HiddenPrints"
 ]

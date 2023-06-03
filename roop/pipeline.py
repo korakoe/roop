@@ -1,6 +1,7 @@
 from .core.swapper import get_face_swapper
 from .core.analyser import get_face_analyser, get_all_faces, get_single_face
 from .core.globals import providers
+from .core.utils import HiddenPrints
 import cv2
 from tqdm import tqdm
 from moviepy.editor import *
@@ -53,13 +54,14 @@ class RoopPipeline:
             result = self.swapper.get(target_img, face, source_face, paste_back=True)
 
         if codeformer:
-            result = cv2_inference_app(
-                image=result,
-                background_enhance=False,
-                face_upsample=True,
-                upscale=1,
-                codeformer_fidelity=self.fidelity,
-            )
+            with HiddenPrints():
+                result = cv2_inference_app(
+                    image=result,
+                    background_enhance=False,
+                    face_upsample=True,
+                    upscale=1,
+                    codeformer_fidelity=self.fidelity,
+                )
 
         return result
 
@@ -90,13 +92,14 @@ class RoopPipeline:
             result = self.swapper.get(frame, face, source_face, paste_back=True)
 
         if codeformer:
-            result = cv2_inference_app(
-                image=result,
-                background_enhance=False,
-                face_upsample=True,
-                upscale=1,
-                codeformer_fidelity=self.fidelity,
-            )
+            with HiddenPrints():
+                result = cv2_inference_app(
+                    image=result,
+                    background_enhance=False,
+                    face_upsample=True,
+                    upscale=1,
+                    codeformer_fidelity=self.fidelity,
+                )
 
         if out_path:
             cv2.imwrite(out_path, result)
@@ -147,13 +150,14 @@ class RoopPipeline:
                         result = frame
 
                         if codeformer:
-                            result = cv2_inference_app(
-                                image=result,
-                                background_enhance=False,
-                                face_upsample=True,
-                                upscale=1,
-                                codeformer_fidelity=self.fidelity,
-                            )
+                            with HiddenPrints():
+                                result = cv2_inference_app(
+                                    image=result,
+                                    background_enhance=False,
+                                    face_upsample=True,
+                                    upscale=1,
+                                    codeformer_fidelity=self.fidelity,
+                                )
 
                         frames[idx] = result
                     else:
@@ -162,13 +166,14 @@ class RoopPipeline:
                             result = self.swapper.get(frame, face, source_face, paste_back=True)
 
                             if codeformer:
-                                result = cv2_inference_app(
-                                    image=result,
-                                    background_enhance=False,
-                                    face_upsample=True,
-                                    upscale=1,
-                                    codeformer_fidelity=self.fidelity,
-                                )
+                                with HiddenPrints():
+                                    result = cv2_inference_app(
+                                        image=result,
+                                        background_enhance=False,
+                                        face_upsample=True,
+                                        upscale=1,
+                                        codeformer_fidelity=self.fidelity,
+                                    )
 
                             frames[idx] = result
                             progress.set_postfix(status='Face found', refresh=True)
@@ -222,12 +227,13 @@ class RoopPipeline:
                     result = img
 
             if codeformer:
-                result = cv2_inference_app(
-                    image=result,
-                    background_enhance=False,
-                    face_upsample=True,
-                    upscale=1,
-                    codeformer_fidelity=self.fidelity,
-                )
+                with HiddenPrints():
+                    result = cv2_inference_app(
+                        image=result,
+                        background_enhance=False,
+                        face_upsample=True,
+                        upscale=1,
+                        codeformer_fidelity=self.fidelity,
+                    )
 
             cv2.imshow("Roop", result)
