@@ -182,6 +182,7 @@ class RoopPipeline:
                             progress.set_postfix(status='Face found', refresh=True)
                         else:
                             progress.set_postfix(status='No Faces', refresh=True)
+                            frames[idx] = cv2.cvtColor(frames[idx], cv2.COLOR_BGR2RGB)
                 except Exception:
                     progress.set_postfix(status='Error', refresh=True)
                     pass
