@@ -11,5 +11,6 @@ __all__ = [
     "add_audio",
     "extract_frames",
     "rreplace",
-    "get_face",
+    "get_single_face",
+    "get_all_faces",
 ]

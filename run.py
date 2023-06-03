@@ -21,7 +21,7 @@ from PIL import Image, ImageTk
 import roop.core.globals
 from roop.core.swapper import process_video_file, process_img_file
 from roop.core import is_img, detect_fps, set_fps, create_video, add_audio, extract_frames, rreplace
-from roop.core import get_face
+from roop.core import get_single_face
 
 if 'ROCMExecutionProvider' in roop.core.globals.providers:
     del torch
@@ -180,7 +180,7 @@ def start():
     global pool
     pool = mp.Pool(args['cores_count'])
     target_path = args['target_path']
-    test_face = get_face(cv2.imread(args['source_img']))
+    test_face = get_single_face(cv2.imread(args['source_img']))
     if not test_face:
         print("\n[WARNING] No face detected in source image. Please try with another one.\n")
         return
