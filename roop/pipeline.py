@@ -132,7 +132,6 @@ class RoopPipeline:
         while success:
             frames.append(image)  # save frame as JPEG file
             success, image = cap.read()
-            print('Read a new frame: ', success)
             count += 1
 
         with tqdm(total=len(frames), desc="Processing", unit="frame", dynamic_ncols=True,
