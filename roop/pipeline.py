@@ -141,10 +141,15 @@ class RoopPipeline:
                 try:
                     if all_faces:
                         many_faces = get_all_faces(frame)
-                        source_face = self.get_face(frame, face_analyser=self.analyser)
                         if many_faces:
+                            frame = frame
                             for face in tqdm(many_faces):
                                 frame = self.swapper.get(frame, face, source_face, paste_back=True)
+
+                            progress.set_postfix(status='Face found', refresh=True)
+                        else:
+                            progress.set_postfix(status='No Faces', refresh=True)
+                            frames[idx] = cv2.cvtColor(frames[idx], cv2.COLOR_BGR2RGB)
 
                         result = frame
 
