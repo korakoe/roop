@@ -158,6 +158,8 @@ class RoopPipeline:
                                     codeformer_fidelity=self.fidelity,
                                 )
 
+                        result = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
+
                         frames[idx] = result
                     else:
                         face = self.get_face(frame)
@@ -174,6 +176,8 @@ class RoopPipeline:
                                         codeformer_fidelity=self.fidelity,
                                     )
 
+                            result = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
+
                             frames[idx] = result
                             progress.set_postfix(status='Face found', refresh=True)
                         else:
@@ -184,7 +188,7 @@ class RoopPipeline:
                 progress.update(1)
 
         clip = ImageSequenceClip(frames, fps=fps)
-        clip.set_audio(audioclip)
+        clip.audio = audioclip
         if out_path:
             print("Saving clip...", end=" ")
             clip.write_videofile(out_path)
