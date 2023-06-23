@@ -197,7 +197,7 @@ class RoopPipeline:
         clip.audio = audioclip
         if out_path:
             print("Saving clip...", end=" ")
-            clip.write_videofile(out_path)
+            clip.write_videofile(out_path, audio_codec='aac')
         print("Done!")
         return clip
 
