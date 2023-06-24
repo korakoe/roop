@@ -22,9 +22,10 @@ class RoopPipeline:
         """
         self.resolution = resolution
         self.model_path = model_path
+        self.confidence = confidence
 
         self.swapper = get_face_swapper(model_path)
-        self.analyser = get_face_analyser(resolution, confidence)
+        self.analyser = get_face_analyser(resolution, self.confidence)
         self.get_face = get_single_face
         self.get_all_faces = get_all_faces
         
@@ -106,7 +107,7 @@ class RoopPipeline:
             print("\n\nImage saved as:", out_path, "\n\n")
         return result
 
-    def process_video_file(self, source_img, video_path, out_path=None, all_faces=False, codeformer=False):
+    def process_video_file(self, source_img, video_path, out_path=None, all_faces=False, codeformer=False, tqdm=tqdm, callback=None):
         """
         Processes a video file, and saves it if supplied an out_path
 
@@ -115,6 +116,8 @@ class RoopPipeline:
         :param out_path: The output path of the video | No out path will only return the clip
         :param all_faces: Whether to deepfake all faces
         :param codeformer: Whether to post-process with codeformer
+        :param tqdm: The tqdm library to use (uses standard by default)
+        :param callback: A function that takes in an img and frame idx, will be called each frame
         :return: A MoviePy video clip of the finished deepfake
         """
         source_face = self.get_face(cv2.imread(source_img))
@@ -124,6 +127,8 @@ class RoopPipeline:
 
         videoclip = VideoFileClip(video_path)
         audioclip = videoclip.audio
+
+        print(f"Loading {video_path}")
 
         frames = []
 
@@ -164,6 +169,9 @@ class RoopPipeline:
                                 )
 
                         result = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
+
+                        if callback is not None:
+                            callback(result, idx)
 
                         frames[idx] = result
                     else:

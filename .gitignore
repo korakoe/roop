@@ -1,0 +1,7 @@
+
+*.pth
+Roop.egg-info/top_level.txt
+Roop.egg-info/SOURCES.txt
+Roop.egg-info/requires.txt
+Roop.egg-info/PKG-INFO
+Roop.egg-info/dependency_links.txt
